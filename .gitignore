@@ -1,0 +1,8 @@
+#ignore folder containing python virtual environment
+**/virtualenv
+
+#ignore local deployment of the script - .egg-link
+**/Webpage_Image_Downloader.egg-info
+
+#ignore Python 3 bytecode compilations
+**/__pycache__
