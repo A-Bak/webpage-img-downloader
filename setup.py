@@ -6,5 +6,5 @@ setuptools.setup(
     author="ABak",
     author_email="adam.bak753@gmail.com",
     description="Tool for extracting and saving specific images from a website.",
-    packages=["cli"],
+    packages=["wid"],
 )
