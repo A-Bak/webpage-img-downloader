@@ -1,3 +1,6 @@
+#ignore VSCode settings, caches and logs
+**/.vscode
+
 #ignore folder containing python virtual environment
 **/virtualenv
 
