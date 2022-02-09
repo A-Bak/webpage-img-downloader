@@ -1,3 +1,4 @@
+from ctypes.wintypes import tagRECT
 import click
 
 import imgscrape
@@ -17,12 +18,18 @@ def execute(url, target, img_regex):
     click.echo("Starting to parse {}...".format(url))
     
     if url is None:
-        
-        imgs = imgscrape.extract_images(pyperclip.paste())
-        
+        target_url = pyperclip.paste()
     else:
+        target_url = url
         
-        imgs = imgscrape.extract_images(url)
+    try:
+        
+        imgscrape.extract_images(target_url)
+        
+    except ValueError:
+        
+        print('ValueError: Invalid target url: {}.'.format(target_url[:30]))
+    
     
     # Store images somewhere        
     
