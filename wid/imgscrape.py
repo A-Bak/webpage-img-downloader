@@ -1,11 +1,13 @@
 import re
-import requests
-from bs4 import BeautifulSoup
+
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options as ChromeOptions
+
+from webdriver_manager.chrome import ChromeDriverManager
 
 
+def validate_url(url):
 
-def extract_images(url):
-    
     if not isinstance(url, str):
         raise TypeError    
     
@@ -21,6 +23,26 @@ def extract_images(url):
     if not url_pattern.match(url):
         raise ValueError    
     
-    html_text = requests.get(url)
+    return True
+
+def extract_images(target_url):
+    
+    validate_url(target_url)
+    
+    chrome_driver_path = ChromeDriverManager().install()
+
+    chrome_options = ChromeOptions()
+    chrome_options.add_argument('--headless')
+    chrome_options.add_argument('--window-size=1920,1080')
+    
+    driver = webdriver.Chrome(chrome_driver_path,
+                              chrome_options=chrome_options)
+    
+    try:
+        driver.get(target_url)
+        driver.get_screenshot_as_file('capture.png')
+        driver.close()
+    except:
+        raise ValueError
     
     return None
