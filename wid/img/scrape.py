@@ -39,6 +39,7 @@ def find_image_urls(target_url: str) -> List[str]:
     validate_url(target_url)
     
     # Initialize a windowless Chrome webdriver for interacting with the website
+    # + hide the browser window and suppress all but fatal error/warning msgs
     chrome_driver_path = ChromeDriverManager().install()
 
     chrome_options = ChromeOptions()
