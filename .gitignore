@@ -11,5 +11,4 @@
 **/__pycache__
 
 #ignore outputs of the script
-out/*
-!out
+wid_images/*

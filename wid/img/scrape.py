@@ -1,9 +1,7 @@
-import os
+from typing import List
+
 import re
 import traceback
-
-from urllib.parse import urlparse
-from urllib.request import urlretrieve
 
 from selenium import webdriver
 from selenium.webdriver.remote.webelement import WebElement
@@ -36,7 +34,7 @@ def validate_url(url: str) -> bool:
 
 
 
-def extract_images(target_url: str) -> None:
+def find_image_urls(target_url: str) -> List[str]:
     
     validate_url(target_url)
     
@@ -54,12 +52,9 @@ def extract_images(target_url: str) -> None:
     try:
         driver.get(target_url)
       
-        image_list = driver.find_elements_by_tag_name('img')
+        image_elements = driver.find_elements_by_tag_name('img')
         
-        for img_element in image_list:
-                
-                img_src = get_element_src(img_element, target_url)
-                download_image(img_src)
+        image_urls = [get_element_src(e, target_url) for e in image_elements]
 
         driver.close()
 
@@ -71,6 +66,8 @@ def extract_images(target_url: str) -> None:
 
     finally:
         driver.quit()
+
+    return image_urls
 
 
 
@@ -90,21 +87,4 @@ def get_element_src(element: WebElement, base_url: str = '') -> str:
     
     
 
-def download_image(url: str, target_dir: str = 'out/') -> None:
-    
-    if url is not None:
-        
-        # Name of the image is the string after last '/' symbol
-        # E.g.: https://duckduckgo.com/assets/icons/header/reddit.svg -> reddit.svg
-        
-        img_path = urlparse(url).path
-        img_basename = os.path.basename(img_path)
-        save_file_path = os.path.join(target_dir, img_basename) 
-        
-        try:
-            print('Downloading image from \'{}\'.'.format(url))
-            urlretrieve(url, save_file_path)
-            
-        except:
-            print('Could not retrieve image \'{}\' from \'{}\'.'.format(img_basename, url))
-                
+           
