@@ -32,13 +32,17 @@ def execute(url, target_dir, img_regex, img_info):
     # Filter images
     
     
+    
+    if img_info:
+        # Print the URLs of images 
+        print("Images found:")
+        for url in image_urls:
+            print(url)
+            
+    else:
+        # Store images in target location
+        img.save.save_images(image_urls, target_dir)    
 
-    
-    
-    
-    # Store images in target location
-    img.save.save_images(image_urls, target_dir)    
-    
     click.echo("Done.")
 
 
