@@ -1,7 +1,6 @@
-from ctypes.wintypes import tagRECT
 import click
 
-import imgscrape
+import img_scrape
 import pyperclip
 
 
@@ -24,7 +23,7 @@ def execute(url, target, img_regex):
         
     try:
         
-        imgscrape.extract_images(target_url)
+        img_scrape.extract_images(target_url)
         
     except ValueError:
         
