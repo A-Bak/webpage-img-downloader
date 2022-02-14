@@ -9,3 +9,7 @@
 
 #ignore Python 3 bytecode compilations
 **/__pycache__
+
+#ignore outputs of the script
+out/*
+!out
