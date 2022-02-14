@@ -1,8 +1,8 @@
+import os
 import re
 import traceback
 
-from pathlib import Path
-
+from urllib.parse import urlparse
 from urllib.request import urlretrieve
 
 from selenium import webdriver
@@ -40,11 +40,13 @@ def extract_images(target_url: str) -> None:
     
     validate_url(target_url)
     
+    # Initialize a windowless Chrome webdriver for interacting with the website
     chrome_driver_path = ChromeDriverManager().install()
 
     chrome_options = ChromeOptions()
     chrome_options.add_argument('--headless')
     chrome_options.add_argument('--window-size=1920,1080')
+    chrome_options.add_argument('--log-level=3')
     
     driver = webdriver.Chrome(chrome_driver_path,
                               chrome_options=chrome_options)
@@ -54,9 +56,9 @@ def extract_images(target_url: str) -> None:
       
         image_list = driver.find_elements_by_tag_name('img')
         
-        for img in image_list:
+        for img_element in image_list:
                 
-                img_src = get_element_src(img)
+                img_src = get_element_src(img_element, target_url)
                 download_image(img_src)
 
         driver.close()
@@ -72,29 +74,37 @@ def extract_images(target_url: str) -> None:
 
 
 
-def get_element_src(element: WebElement) -> str:
+def get_element_src(element: WebElement, base_url: str = '') -> str:
     
+    # Elements with URLs
     if element.get_attribute('src'):
         return element.get_attribute('src')
-    
-    elif element.get_attribute('data-src'):
-        return element.get_attribute('data-src')
         
+    # Elements with just URIs -> prepend base address
+    elif element.get_attribute('data-src'):
+        return base_url + element.get_attribute('data-src')
+    
+    # Element has neither attribute -> missing a link?
     else:
         return None
     
     
 
-def download_image(url: str, target_dir: str = None) -> None:
+def download_image(url: str, target_dir: str = 'out/') -> None:
     
     if url is not None:
-        dir_path = Path(target_dir) if target_dir is not None else Path('out/')
-        img_name = url.rpartition('/')[-1]
-        save_file_path = Path.joinpath(dir_path, img_name)
+        
+        # Name of the image is the string after last '/' symbol
+        # E.g.: https://duckduckgo.com/assets/icons/header/reddit.svg -> reddit.svg
+        
+        img_path = urlparse(url).path
+        img_basename = os.path.basename(img_path)
+        save_file_path = os.path.join(target_dir, img_basename) 
         
         try:
+            print('Downloading image from \'{}\'.'.format(url))
             urlretrieve(url, save_file_path)
-        
+            
         except:
-            print('Could not retrieve image \'{}\' from \'{}\'.'.format(img_name, url))
+            print('Could not retrieve image \'{}\' from \'{}\'.'.format(img_basename, url))
                 
