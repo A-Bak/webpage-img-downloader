@@ -6,6 +6,21 @@ from urllib.request import urlretrieve
 
 
 
+def save_images(url_list: str, path_to_dir: str) -> None:
+    
+    create_dir(path_to_dir)
+    
+    for url in url_list:
+        
+        try:
+            print('Downloading image from \'{}\'.'.format(url))
+            download_image(url, path_to_dir)
+        
+        except:
+            print('Could not retrieve image from \'{}\'.'.format(url))
+            
+            
+
 def create_dir(path_to_dir: str) -> None:
     
     if not os.path.isdir(path_to_dir):
@@ -17,7 +32,8 @@ def create_dir(path_to_dir: str) -> None:
             print('Error: Failed to create target_dir \'{}\'.'.format(path_to_dir))
 
 
-def download_image(url: str, target_dir: str = './') -> None:
+
+def download_image(url: str, path_to_dir: str = './') -> None:
     
     if url is not None:
         
@@ -26,11 +42,9 @@ def download_image(url: str, target_dir: str = './') -> None:
         
         img_path = urlparse(url).path
         img_basename = os.path.basename(img_path)
-        save_file_path = os.path.join(target_dir, img_basename) 
+        save_file_path = os.path.join(path_to_dir, img_basename) 
         
-        try:
-            print('Downloading image from \'{}\'.'.format(url))
-            urlretrieve(url, save_file_path)
+        urlretrieve(url, save_file_path)
+        
+
             
-        except:
-            print('Could not retrieve image \'{}\' from \'{}\'.'.format(img_basename, url))

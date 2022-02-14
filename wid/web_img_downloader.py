@@ -8,12 +8,12 @@ import img.scrape
 
 
 @click.command()
-@click.option('--url', default=None, help='Url of the website containing desired images.')
-@click.option('--target_dir', default='./wid_images', help='Target directory used to store images.')
-@click.option('--img_regex', help='Regex for finding specific subset of images on the website.')
+@click.option('--url', '-u', default=None, help='Url of the website containing desired images.')
+@click.option('--target_dir', '-t', default='./wid_images', help='Target directory used to store images.')
+@click.option('--img_regex', '-r', help='Regex for finding specific subset of images on the website.')
 
-@click.option('--info', help='Option to only find and print all image URLs on the website.')
-def execute(url, target_dir, img_regex):
+@click.option('--img-info', '-i', is_flag=True, help='Option to only find and print all image URLs on the website.')
+def execute(url, target_dir, img_regex, img_info):
     
     """ Python script for extracting and saving images from websites. """
         
@@ -32,14 +32,12 @@ def execute(url, target_dir, img_regex):
     # Filter images
     
     
+
+    
+    
     
     # Store images in target location
-    img.save.create_dir(target_dir)
-    
-    for u in image_urls:
-        img.save.download_image(u, target_dir)   
-    
-    
+    img.save.save_images(image_urls, target_dir)    
     
     click.echo("Done.")
 
