@@ -16,6 +16,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 def validate_url(url: str) -> bool:
 
     if not isinstance(url, str):
+        print('TypeError: Target URL is not a string type: \'{}\'.'.format(url))
         raise TypeError    
     
     # TODO: separete regex for when HTTP protocol is not specified
@@ -28,6 +29,7 @@ def validate_url(url: str) -> bool:
     url_pattern = re.compile(url_regex)
     
     if not url_pattern.match(url):
+        print('ValueError: Invalid target URL: \'{}\'.'.format(url[:30]))
         raise ValueError    
     
     return True
@@ -54,7 +56,6 @@ def find_image_urls(target_url: str) -> List[str]:
         driver.get(target_url)
       
         image_elements = driver.find_elements_by_tag_name('img')
-        
         image_urls = [get_element_src(e, target_url) for e in image_elements]
 
         driver.close()
@@ -88,4 +89,6 @@ def get_element_src(element: WebElement, base_url: str = '') -> str:
     
     
 
-           
+def get_page_source(url: str) -> str:
+    
+    validate_url(url)       
