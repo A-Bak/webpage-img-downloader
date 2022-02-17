@@ -12,11 +12,10 @@ from url.utils import set_url_scheme, get_url_netloc
 
 @click.command()
 @click.option('--url', '-u', default=None, help='Url of the website containing desired images.')
-@click.option('--target-dir', '-t', default='./wid_images', help='Target directory used to store images.')
+@click.option('--target-dir', '-t', default=None, help='Target directory used to store images.')
 @click.option('--img-regex', '-r', default=None, help='Regex for finding specific subset of images on the website.')
 
 @click.option('--img-info', '-i', is_flag=True, help='Option to find and print all image URLs on the website.')
-# TODO: Change from flag to take and argument? path_to_file for saving?
 @click.option('--page-source', '-p', is_flag=True, help='Option to get the source code of target website and print it (save it).')
 def execute(url: str, target_dir: str, img_regex: str, img_info: bool, page_source: bool) -> None:
     
@@ -31,9 +30,11 @@ def execute(url: str, target_dir: str, img_regex: str, img_info: bool, page_sour
         get_img_info(target_url, img_regex)
         
     if page_source:
+        target_dir = target_dir if target_dir is not None else './wid-page-source'
         get_page_source(target_url, target_dir)
        
     if not img_info and not page_source:
+        target_dir = target_dir if target_dir is not None else './wid-images'
         download_images(target_url, target_dir, img_regex)
         
 
