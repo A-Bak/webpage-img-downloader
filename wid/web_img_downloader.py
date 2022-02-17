@@ -1,10 +1,12 @@
+import os
+
 import click
 import pyperclip
 
 import img.save
 import img.scrape
 
-from url.utils import set_url_scheme
+from url.utils import set_url_scheme, get_url_netloc
 
 
 
@@ -65,10 +67,14 @@ def get_page_source(target_url: str, target_dir: str) -> None:
 
     try:
         # Load the page and get its source code
-        src = img.scrape.get_page_source(target_url)
+        page_src = img.scrape.get_page_source(target_url)
             
         # Save the source code to a file (implement in save.py)
-        print(src)
+        file_name = get_url_netloc(target_url) + '.txt'
+        save_file_path = os.path.join(target_dir, file_name)
+        
+        with open(save_file_path, 'w', encoding='utf8') as f:
+            f.write(page_src)
             
     except:
         click.echo('Failed.')        

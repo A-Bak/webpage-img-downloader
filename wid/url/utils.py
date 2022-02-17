@@ -54,3 +54,14 @@ def set_url_scheme(url: str) -> str:
     
     else:
         return url
+    
+    
+def get_url_netloc(url: str) -> str:
+    
+    parsed_url = urllib.parse.urlparse(url)
+    
+    if parsed_url.netloc == '':
+        raise ValueError
+    
+    else:
+        return parsed_url.netloc

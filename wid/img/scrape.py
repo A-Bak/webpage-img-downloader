@@ -16,6 +16,7 @@ import url.utils
 
 
 
+
 def initialize_webdriver() -> WebDriver:
 
     # Initialize a windowless Chrome webdriver for interacting with the website
