@@ -54,7 +54,7 @@ def get_img_info(target_url: str, target_dir: str, img_regex: str) -> None:
     except:
         click.echo('Failed.')        
     
-    finally:
+    else:
         click.echo('Done.')
         
         
@@ -64,7 +64,7 @@ def get_page_source(target_url: str, target_dir: str) -> None:
     click.echo('Attempting to open {}...'.format(target_url))
 
     try:
-        
+        # Load the page and get its source code
         src = img.scrape.get_page_source(target_url)
             
         # Save the source code to a file (implement in save.py)
@@ -73,7 +73,7 @@ def get_page_source(target_url: str, target_dir: str) -> None:
     except:
         click.echo('Failed.')        
     
-    finally:
+    else:
         click.echo('Page source code saved.')
         
         
@@ -95,7 +95,7 @@ def download_images(target_url: str, target_dir: str, img_regex: str) -> None:
     except:
         click.echo('Failed.')        
     
-    finally:
+    else:
         click.echo('Done.')
 
 
