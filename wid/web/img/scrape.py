@@ -12,7 +12,7 @@ from selenium.common.exceptions import WebDriverException
 
 from webdriver_manager.chrome import ChromeDriverManager
 
-import url.utils
+import web.url
 
 
 
@@ -35,7 +35,7 @@ def initialize_webdriver() -> WebDriver:
 
 def find_image_urls(target_url: str) -> List[str]:
     
-    url.utils.validate_url(target_url)
+    web.url.validate_url(target_url)
     
     driver = initialize_webdriver()
     
@@ -79,7 +79,7 @@ def get_element_src(element: WebElement, base_url: str = '') -> str:
 
 def get_page_source(target_url: str) -> str:
     
-    url.utils.validate_url(target_url)       
+    web.url.validate_url(target_url)       
     
     driver = initialize_webdriver()
     

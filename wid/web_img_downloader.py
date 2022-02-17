@@ -3,10 +3,11 @@ import os
 import click
 import pyperclip
 
-import img.save
-import img.scrape
+import web.img.save
+import web.img.scrape
+import web.url
 
-from url.utils import set_url_scheme, get_url_netloc, filter_urls
+import file.utils
 
 
 
@@ -24,7 +25,7 @@ def execute(url: str, target_dir: str, img_regex: str, img_info: bool, page_sour
     target_url = pyperclip.paste() if url is None else url
     
     # Add URL scheme if it's missing in the original URL
-    target_url = set_url_scheme(target_url)
+    target_url = web.url.set_url_scheme(target_url)
     
     if img_info:
         get_img_info(target_url, img_regex)
@@ -45,11 +46,11 @@ def get_img_info(target_url: str, img_regex: str) -> None:
 
     try:
         # Find URLs for all images on target website   
-        image_urls = img.scrape.find_image_urls(target_url)
+        image_urls = web.img.scrape.find_image_urls(target_url)
         
         # Filter image links
         if img_regex is not None:
-            image_urls = filter_urls(image_urls, img_regex)
+            image_urls = web.url.filter_urls(image_urls, img_regex)
 
         # Print the URLs of images 
         print('Images found:')
@@ -71,13 +72,12 @@ def get_page_source(target_url: str, target_dir: str) -> None:
 
     try:
         # Load the page and get its source code
-        page_src = img.scrape.get_page_source(target_url)
+        page_src = web.img.scrape.get_page_source(target_url)
             
         # Save the source code to a file (implement in save.py)
-        file_name = get_url_netloc(target_url) + '.txt'
+        file_name = web.url.get_url_netloc(target_url) + '.txt'
         save_file_path = os.path.join(target_dir, file_name).replace('\\', '/')
-        # TODO: refactoring img.save - func used to save the page src
-        img.save.create_dir(target_dir)
+        file.utils.create_dir(target_dir)
 
         with open(save_file_path, 'w', encoding='utf8') as f:
             f.write(page_src)
@@ -96,14 +96,14 @@ def download_images(target_url: str, target_dir: str, img_regex: str) -> None:
         
     try:
         # Find URLs for all images on target website   
-        image_urls = img.scrape.find_image_urls(target_url)
+        image_urls = web.img.scrape.find_image_urls(target_url)
         
         # Filter images
         if img_regex is not None:
-            image_urls = filter_urls(image_urls, img_regex)
+            image_urls = web.url.filter_urls(image_urls, img_regex)
         
         # Store images in target location
-        img.save.save_images(image_urls, target_dir)    
+        web.img.save.save_images(image_urls, target_dir)    
     
     except:
         click.echo('Failed.')        
