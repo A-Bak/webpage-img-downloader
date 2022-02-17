@@ -39,7 +39,7 @@ def execute(url: str, target_dir: str, img_regex: str, img_info: bool, page_sour
         
 
 
-def get_img_info(target_url: str, target_dir: str, img_regex: str) -> None:
+def get_img_info(target_url: str, img_regex: str) -> None:
 
     click.echo('Starting to parse {}...'.format(target_url))
 
