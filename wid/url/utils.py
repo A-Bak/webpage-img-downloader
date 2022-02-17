@@ -1,3 +1,5 @@
+from typing import List
+
 import re
 import urllib
 
@@ -65,3 +67,13 @@ def get_url_netloc(url: str) -> str:
     
     else:
         return parsed_url.netloc
+    
+    
+
+def filter_urls(url_list: List[str], regex: str) -> List[str]:
+    
+    pattern = re.compile(regex)
+    
+    filter_func = lambda x: pattern.match(x)    
+    
+    return list(filter(filter_func, url_list))

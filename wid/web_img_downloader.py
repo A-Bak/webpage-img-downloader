@@ -6,7 +6,7 @@ import pyperclip
 import img.save
 import img.scrape
 
-from url.utils import set_url_scheme, get_url_netloc
+from url.utils import set_url_scheme, get_url_netloc, filter_urls
 
 
 
@@ -47,16 +47,19 @@ def get_img_info(target_url: str, img_regex: str) -> None:
         # Find URLs for all images on target website   
         image_urls = img.scrape.find_image_urls(target_url)
         
-        # TODO: Filter image links
+        # Filter image links
+        if img_regex is not None:
+            image_urls = filter_urls(image_urls, img_regex)
 
         # Print the URLs of images 
         print('Images found:')
         for url in image_urls:
             print(url)
             
-    except:
+    except Exception as e:
         click.echo('Failed.')        
-    
+        raise e
+        
     else:
         click.echo('Done.')
         
@@ -72,8 +75,10 @@ def get_page_source(target_url: str, target_dir: str) -> None:
             
         # Save the source code to a file (implement in save.py)
         file_name = get_url_netloc(target_url) + '.txt'
-        save_file_path = os.path.join(target_dir, file_name)
-        
+        save_file_path = os.path.join(target_dir, file_name).replace('\\', '/')
+        # TODO: refactoring img.save - func used to save the page src
+        img.save.create_dir(target_dir)
+
         with open(save_file_path, 'w', encoding='utf8') as f:
             f.write(page_src)
             
@@ -93,8 +98,9 @@ def download_images(target_url: str, target_dir: str, img_regex: str) -> None:
         # Find URLs for all images on target website   
         image_urls = img.scrape.find_image_urls(target_url)
         
-        # TODO: Filter images
-        
+        # Filter images
+        if img_regex is not None:
+            image_urls = filter_urls(image_urls, img_regex)
         
         # Store images in target location
         img.save.save_images(image_urls, target_dir)    
