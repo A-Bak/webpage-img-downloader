@@ -1,10 +1,12 @@
+import os
+
 import click
 import pyperclip
 
 import img.save
 import img.scrape
 
-from url.utils import set_url_scheme
+from url.utils import set_url_scheme, get_url_netloc
 
 
 
@@ -24,7 +26,7 @@ def execute(url: str, target_dir: str, img_regex: str, img_info: bool, page_sour
     
     # Add URL scheme if it's missing in the original URL
     target_url = set_url_scheme(target_url)
-    
+
     if img_info:
         get_img_info(target_url, img_regex)
         
@@ -54,7 +56,7 @@ def get_img_info(target_url: str, target_dir: str, img_regex: str) -> None:
     except:
         click.echo('Failed.')        
     
-    finally:
+    else:
         click.echo('Done.')
         
         
@@ -64,16 +66,19 @@ def get_page_source(target_url: str, target_dir: str) -> None:
     click.echo('Attempting to open {}...'.format(target_url))
 
     try:
-        
-        src = img.scrape.get_page_source(target_url)
+        page_src = img.scrape.get_page_source(target_url)
             
-        # Save the source code to a file (implement in save.py)
-        print(src)
+        netloc = get_url_netloc(target_url)
+        file_name = netloc + '.txt'
+        save_file_path = os.path.join(target_dir, file_name)
+            
+        with open(save_file_path, 'w') as f:
+            f.write(page_src)
             
     except:
         click.echo('Failed.')        
     
-    finally:
+    else:
         click.echo('Page source code saved.')
         
         
@@ -95,7 +100,7 @@ def download_images(target_url: str, target_dir: str, img_regex: str) -> None:
     except:
         click.echo('Failed.')        
     
-    finally:
+    else:
         click.echo('Done.')
 
 
