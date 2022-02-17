@@ -1,7 +1,28 @@
-from ast import parse
 import re
 import urllib
 
+
+
+
+def validate_url(url: str) -> bool:
+
+    if not isinstance(url, str):
+        print('TypeError: Target URL is not a string type: \'{}\'.'.format(url))
+        raise TypeError    
+    
+    url_regex = ("((http|https|ftp)://)(www.)?" +
+                "[a-zA-Z0-9@:%._\\+~#?&//=]" +
+                "{2,256}\\.[a-z]" +
+                "{2,6}\\b([-a-zA-Z0-9@:%" +
+                "._\\+~#?&//=]*)")
+    
+    url_pattern = re.compile(url_regex)
+    
+    if not url_pattern.match(url):
+        print('ValueError: Invalid target URL: \'{}\'.'.format(url[:30]))
+        raise ValueError    
+    
+    return True
 
 
 
@@ -18,6 +39,7 @@ def has_scheme(url: str) -> bool:
     
     else:
         return False
+
 
 
 def set_url_scheme(url: str) -> str:

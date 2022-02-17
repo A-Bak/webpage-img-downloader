@@ -4,7 +4,7 @@ import pyperclip
 import img.save
 import img.scrape
 
-import utils
+from url.utils import set_url_scheme
 
 
 
@@ -23,7 +23,7 @@ def execute(url: str, target_dir: str, img_regex: str, img_info: bool, page_sour
     target_url = pyperclip.paste() if url is None else url
     
     # Add URL scheme if it's missing in the original URL
-    target_url = utils.set_url_scheme(target_url)
+    target_url = set_url_scheme(target_url)
     
     if img_info:
         get_img_info(target_url, img_regex)

@@ -12,28 +12,7 @@ from selenium.common.exceptions import WebDriverException
 
 from webdriver_manager.chrome import ChromeDriverManager
 
-
-
-def validate_url(url: str) -> bool:
-
-    if not isinstance(url, str):
-        print('TypeError: Target URL is not a string type: \'{}\'.'.format(url))
-        raise TypeError    
-    
-    # TODO: separete regex for when HTTP protocol is not specified
-    url_regex = ("((http|https)://)(www.)?" +
-                "[a-zA-Z0-9@:%._\\+~#?&//=]" +
-                "{2,256}\\.[a-z]" +
-                "{2,6}\\b([-a-zA-Z0-9@:%" +
-                "._\\+~#?&//=]*)")
-    
-    url_pattern = re.compile(url_regex)
-    
-    if not url_pattern.match(url):
-        print('ValueError: Invalid target URL: \'{}\'.'.format(url[:30]))
-        raise ValueError    
-    
-    return True
+import url.utils
 
 
 
@@ -50,10 +29,12 @@ def initialize_webdriver() -> WebDriver:
     
     return webdriver.Chrome(chrome_driver_path,
                             chrome_options=chrome_options)
+    
+    
 
 def find_image_urls(target_url: str) -> List[str]:
     
-    validate_url(target_url)
+    url.utils.validate_url(target_url)
     
     driver = initialize_webdriver()
     
@@ -97,7 +78,7 @@ def get_element_src(element: WebElement, base_url: str = '') -> str:
 
 def get_page_source(target_url: str) -> str:
     
-    validate_url(target_url)       
+    url.utils.validate_url(target_url)       
     
     driver = initialize_webdriver()
     
