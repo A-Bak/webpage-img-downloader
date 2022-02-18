@@ -3,11 +3,13 @@ import os
 import click
 import pyperclip
 
+from web.url import Url
+
 import web.img.save
 import web.img.scrape
-import web.url
 
 import file.utils
+
 
 
 
@@ -22,10 +24,9 @@ def execute(url: str, target_dir: str, img_regex: str, img_info: bool, page_sour
     
     """ Python script for extracting and saving images from websites. """
         
-    target_url = pyperclip.paste() if url is None else url
+    url_string = pyperclip.paste() if url is None else url
     
-    # Add URL scheme if it's missing in the original URL
-    target_url = web.url.set_url_scheme(target_url)
+    target_url = Url(url_string)
     
     if img_info:
         get_img_info(target_url, img_regex)
@@ -40,7 +41,7 @@ def execute(url: str, target_dir: str, img_regex: str, img_info: bool, page_sour
         
 
 
-def get_img_info(target_url: str, img_regex: str) -> None:
+def get_img_info(target_url: Url, img_regex: str) -> None:
 
     click.echo('Starting to parse {}...'.format(target_url))
 
@@ -50,12 +51,13 @@ def get_img_info(target_url: str, img_regex: str) -> None:
         
         # Filter image links
         if img_regex is not None:
-            image_urls = web.url.filter_urls(image_urls, img_regex)
+            image_urls = Url.filter_url_list(image_urls, img_regex)
 
         # Print the URLs of images 
         print('Images found:')
         for url in image_urls:
-            print(url)
+            if url is not None:
+                print(url)
             
     except Exception as e:
         click.echo('Failed.')        
@@ -66,7 +68,7 @@ def get_img_info(target_url: str, img_regex: str) -> None:
         
         
         
-def get_page_source(target_url: str, target_dir: str) -> None:
+def get_page_source(target_url: Url, target_dir: str) -> None:
 
     click.echo('Attempting to open {}...'.format(target_url))
 
@@ -75,7 +77,7 @@ def get_page_source(target_url: str, target_dir: str) -> None:
         page_src = web.img.scrape.get_page_source(target_url)
             
         # Save the source code to a file (implement in save.py)
-        file_name = web.url.get_url_netloc(target_url) + '.txt'
+        file_name = target_url.netloc + '.txt'
         save_file_path = os.path.join(target_dir, file_name).replace('\\', '/')
         file.utils.create_dir(target_dir)
 
@@ -84,13 +86,13 @@ def get_page_source(target_url: str, target_dir: str) -> None:
             
     except:
         click.echo('Failed.')        
-    
+        
     else:
         click.echo('Page source code saved.')
         
         
 
-def download_images(target_url: str, target_dir: str, img_regex: str) -> None:
+def download_images(target_url: Url, target_dir: str, img_regex: str) -> None:
     
     click.echo('Starting to parse {}...'.format(target_url))
         
@@ -100,7 +102,7 @@ def download_images(target_url: str, target_dir: str, img_regex: str) -> None:
         
         # Filter images
         if img_regex is not None:
-            image_urls = web.url.filter_urls(image_urls, img_regex)
+            image_urls = Url.filter_url_list(image_urls, img_regex)
         
         # Store images in target location
         web.img.save.save_images(image_urls, target_dir)    

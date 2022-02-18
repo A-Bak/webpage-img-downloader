@@ -1,79 +1,104 @@
+from __future__ import annotations
 from typing import List
 
 import re
+
 import urllib
 
 
 
 
-def validate_url(url: str) -> bool:
-
-    if not isinstance(url, str):
-        print('TypeError: Target URL is not a string type: \'{}\'.'.format(url))
-        raise TypeError    
-    
-    url_regex = ("((http|https|ftp)://)(www.)?" +
-                "[a-zA-Z0-9@:%._\\+~#?&//=]" +
-                "{2,256}\\.[a-z]" +
-                "{2,6}\\b([-a-zA-Z0-9@:%" +
-                "._\\+~#?&//=]*)")
-    
-    url_pattern = re.compile(url_regex)
-    
-    if not url_pattern.match(url):
-        print('ValueError: Invalid target URL: \'{}\'.'.format(url[:30]))
-        raise ValueError    
-    
-    return True
-
-
-
-def has_scheme(url: str) -> bool:
-    
-    if not isinstance(url, str):
-        raise TypeError
-    
-    scheme_regex = '(http|https)://.*'
-    scheme_patter = re.compile(scheme_regex)
-    
-    if scheme_patter.match(url):
-        return True
-    
-    else:
-        return False
-
-
-
-def set_url_scheme(url: str) -> str:
-    
-    parsed_url = urllib.parse.urlparse(url)
-    
-    if not has_scheme(url):
-        scheme = "https"
-        parsed_url = parsed_url._replace(scheme=scheme)
-                    
-        return urllib.parse.urlunparse(parsed_url)
-    
-    else:
-        return url
-    
-    
-def get_url_netloc(url: str) -> str:
-    
-    parsed_url = urllib.parse.urlparse(url)
-    
-    if parsed_url.netloc == '':
-        raise ValueError
-    
-    else:
-        return parsed_url.netloc
-    
+class Url(str):
     
 
-def filter_urls(url_list: List[str], regex: str) -> List[str]:
+    def __init__(self, url: str, default_scheme: str='https://') -> None:
+            
+            
+            if not '//' in url:
+                url_string = default_scheme + url
+            
+            else:
+                url_string = url
+            
+            parsed_url = urllib.parse.urlparse(url_string)
+            
+            self.scheme = parsed_url.scheme
+            self.netloc = parsed_url.netloc
+            self.path = parsed_url.path
+            self.params = parsed_url.params
+            self.query = parsed_url.query
+            self.fragment = parsed_url.fragment
+            
     
-    pattern = re.compile(regex)
+    def is_valid(self) -> bool:  
+        
+        url_regex = ("((http|https|ftp)://)(www.)?" +
+                    "[a-zA-Z0-9@:%._\\+~#?&//=]" +
+                    "{2,256}\\.[a-z]" +
+                    "{2,6}\\b([-a-zA-Z0-9@:%" +
+                    "._\\+~#?&//=]*)")
+        
+        url_pattern = re.compile(url_regex)
+        
+        if not url_pattern.match(self.__str__()):
+            return False  
+        
+        else:
+            return True
+        
+        
+    def has_scheme(self) -> bool:
+        
+        if self.scheme is not None and self.scheme != '': 
+            return True
+        
+        else:
+            return False
+
     
-    filter_func = lambda x: pattern.match(x)    
+    def set_url_scheme(self, scheme: str) -> None:
     
-    return list(filter(filter_func, url_list))
+        self.scheme = scheme
+        self.url_string = self.__str__()
+        
+        
+    def get_base_url(self) -> str:
+        
+        if self.scheme is not None and self.scheme != '':
+            return self.scheme + '://' + self.netloc
+        
+        else:
+            return self.netloc
+    
+    
+    def match(self, pattern: re.Pattern) -> bool:
+        
+        if pattern.match(self.url_string):
+            return True
+        
+        else:
+            return False
+        
+        
+    def __repr__(self) -> str:
+        return self.__str__()
+    
+            
+    def __str__(self) -> str:
+        
+        return urllib.parse.urlunparse((self.scheme,
+                                        self.netloc,
+                                        self.path,
+                                        self.params,
+                                        self.query,
+                                        self.fragment))
+            
+    
+    @staticmethod
+    def filter_url_list(url_list: List[Url], regex: str) -> List[Url]:
+        
+        pattern = re.compile(regex)
+        filter_func = lambda x: x.match(pattern)
+        return list(filter(filter_func, url_list))
+ 
+

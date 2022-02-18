@@ -12,7 +12,7 @@ from selenium.common.exceptions import WebDriverException
 
 from webdriver_manager.chrome import ChromeDriverManager
 
-import web.url
+from web.url import Url
 
 
 
@@ -33,9 +33,11 @@ def initialize_webdriver() -> WebDriver:
     
     
 
-def find_image_urls(target_url: str) -> List[str]:
+def find_image_urls(target_url: Url) -> List[Url]:
     
-    web.url.validate_url(target_url)
+    if not target_url.is_valid():
+        print('ValueError: Invalid target URL: \'{}\'.'.format(target_url))
+        raise ValueError
     
     driver = initialize_webdriver()
     
@@ -50,9 +52,6 @@ def find_image_urls(target_url: str) -> List[str]:
     except WebDriverException as e:
         print('Error: Could not resolve site \'{}\'.'.format(target_url))
         raise e
-        
-    except:
-        traceback.print_exc()
 
     finally:
         driver.quit()
@@ -61,15 +60,18 @@ def find_image_urls(target_url: str) -> List[str]:
 
 
 
-def get_element_src(element: WebElement, base_url: str = '') -> str:
+def get_element_src(element: WebElement, url: Url) -> Url:
     
-    # Elements with URLs
+    # Elements with full URLs
     if element.get_attribute('src'):
-        return element.get_attribute('src')
+        url_string = element.get_attribute('src')
+        return Url(url_string)
         
     # Elements with just URIs -> prepend base address
     elif element.get_attribute('data-src'):
-        return base_url + element.get_attribute('data-src')
+        
+        url_string = url.get_base_url() + element.get_attribute('data-src')
+        return Url(url_string)
     
     # Element has neither attribute -> missing a link?
     else:
@@ -77,9 +79,11 @@ def get_element_src(element: WebElement, base_url: str = '') -> str:
     
     
 
-def get_page_source(target_url: str) -> str:
+def get_page_source(target_url: Url) -> str:
     
-    web.url.validate_url(target_url)       
+    if not target_url.is_valid():
+        print('ValueError: Invalid target URL: \'{}\'.'.format(target_url))
+        raise ValueError        
     
     driver = initialize_webdriver()
     
