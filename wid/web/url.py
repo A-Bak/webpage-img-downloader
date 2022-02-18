@@ -13,7 +13,6 @@ class Url(str):
 
     def __init__(self, url: str, default_scheme: str='https://') -> None:
             
-            
             if not '//' in url:
                 url_string = default_scheme + url
             
@@ -28,6 +27,7 @@ class Url(str):
             self.params = parsed_url.params
             self.query = parsed_url.query
             self.fragment = parsed_url.fragment
+            
             
     
     def is_valid(self) -> bool:  
@@ -47,20 +47,6 @@ class Url(str):
             return True
         
         
-    def has_scheme(self) -> bool:
-        
-        if self.scheme is not None and self.scheme != '': 
-            return True
-        
-        else:
-            return False
-
-    
-    def set_url_scheme(self, scheme: str) -> None:
-    
-        self.scheme = scheme
-        self.url_string = self.__str__()
-        
         
     def get_base_url(self) -> str:
         
@@ -69,6 +55,7 @@ class Url(str):
         
         else:
             return self.netloc
+    
     
     
     def match(self, pattern: re.Pattern) -> bool:
@@ -80,9 +67,12 @@ class Url(str):
             return False
         
         
+        
     def __repr__(self) -> str:
+        
         return self.__str__()
     
+            
             
     def __str__(self) -> str:
         
@@ -93,6 +83,7 @@ class Url(str):
                                         self.query,
                                         self.fragment))
             
+    
     
     @staticmethod
     def filter_url_list(url_list: List[Url], regex: str) -> List[Url]:
