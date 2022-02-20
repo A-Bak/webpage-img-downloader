@@ -14,14 +14,23 @@ import file.utils
              
 def save_images(url_list: List[Url], path_to_dir: str) -> None:
     """
-    Save a set of images from a list of URLs to a location on disk.
+    Function saves a set of images from a list of URLs to a location on disk.
+    Each image is saved using web.img.save.download_image() function. 
+    If there are any missing directories on the path_to_dir, they are created
+    using file.utils.create_dir().
     
-    Requires a list of URLs url_list and a location path_to_dir.
-    Each individual image is saved using web.img.save.download_image()
-    function. If there are any missing directories on the path_to_dir,
-    they are created using file.utils.create_dir().
     
-    """    
+    Parameters
+    -------------------------------------------------------------------------
+        url_list : List[web.url.Url]
+            list of URL references to images
+        path_to_dir : str
+            save file location for the images in url_list
+            
+    Returns
+    -------------------------------------------------------------------------
+        None
+    """   
     file.utils.create_dir(path_to_dir)
     
     for url in url_list:
@@ -37,18 +46,25 @@ def save_images(url_list: List[Url], path_to_dir: str) -> None:
 
 def download_image(url: Url, path_to_dir: str = './') -> None:
     """
-    Download a single image pointed to by a URL and save it to a
-    location on the disk.
-    
-    Requires a URL argument. If a location is not provided by a
-    path_to_dir argument, then the default './' working directory
-    is used to store the image.
+    Function downloads a single image pointed to by a URL and save it to a
+    location on the disk. If a location is not provided by the path_to_dir
+    parameter, then working directory './' is used by default.
     
     Name of the image file is the basename of the path portion of the URL.
     It is the string after last '/' symbol e.g.:
     https://duckduckgo.com/assets/icons/header/reddit.svg -> reddit.svg
-        
-    """
+    
+    Parameters
+    -------------------------------------------------------------------------
+        url : web.url.Url
+            URL reference to the image
+        path_to_dir : str
+            save file location for the image
+            
+    Returns
+    -------------------------------------------------------------------------
+        None
+    """   
     if url is not None:
         img_path = url.path
         img_basename = os.path.basename(img_path)

@@ -18,9 +18,15 @@ from web.url import Url
 
 
 def initialize_webdriver() -> WebDriver:
-
-    # Initialize a windowless Chrome webdriver for interacting with the website
-    # + hide the browser window and suppress all but fatal error/warning msgs
+    """
+    Function initialized a headless Chrome webdriver instance with suppressed
+    warnings/errors.
+    
+    Returns
+    -------------------------------------------------------------------------
+        driver : selenium.remote.webdriver.WebDriver
+           webdriver instance
+    """           
     chrome_driver_path = ChromeDriverManager().install()
 
     chrome_options = ChromeOptions()
@@ -34,7 +40,20 @@ def initialize_webdriver() -> WebDriver:
     
 
 def find_image_urls(target_url: Url) -> List[Url]:
+    """
+    Function searches the web page referenced by target_url for images. The function
+    looks through the DOM tree structure for 'img' elements and return a list of URLs
+    referencing each image.
     
+    Parameters
+    -------------------------------------------------------------------------
+        target_url : web.url.Url
+            url of the target website
+    Returns
+    -------------------------------------------------------------------------
+        image_list : List[web.url.Url]
+           list of URLs to images found on the website
+    """      
     if not target_url.is_valid():
         print('ValueError: Invalid target URL: \'{}\'.'.format(target_url))
         raise ValueError
@@ -61,13 +80,29 @@ def find_image_urls(target_url: Url) -> List[Url]:
 
 
 def get_element_src(element: WebElement, url: Url) -> Url:
+    """
+    Function returns the source URL for given element. If the source URL is
+    relative then the function takes base_name from the provided URL and prepends
+    it to the relative URL.
     
-    # Elements with full URLs
+    Parameters
+    -------------------------------------------------------------------------
+        element : selenium.webdriver.remote.webelement.WebElement
+            HTML element
+        url : web.url.Url
+            url of the web page where the element is located
+            
+    Returns
+    -------------------------------------------------------------------------
+        url : web.url.Url
+           source URL of given element
+    """     
+    # Elements with absolute URLs
     if element.get_attribute('src'):
         url_string = element.get_attribute('src')
         return Url(url_string)
         
-    # Elements with just URIs -> prepend base address
+    # Elements relative URLs -> prepend base address
     elif element.get_attribute('data-src'):
         
         url_string = url.get_base_url() + element.get_attribute('data-src')
@@ -80,7 +115,20 @@ def get_element_src(element: WebElement, url: Url) -> Url:
     
 
 def get_page_source(target_url: Url) -> str:
+    """
+    Function returns the full HTML source code of the web page referenced by
+    target_url.
     
+    Parameters
+    -------------------------------------------------------------------------
+        url : web.url.Url
+            url of a web page
+            
+    Returns
+    -------------------------------------------------------------------------
+        page_source : str
+           string containing the source code of given web page
+    """   
     if not target_url.is_valid():
         print('ValueError: Invalid target URL: \'{}\'.'.format(target_url))
         raise ValueError        
