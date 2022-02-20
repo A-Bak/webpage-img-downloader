@@ -3,7 +3,7 @@ from typing import List
 
 import re
 
-import urllib
+import urllib.parse
 
 
 
@@ -67,6 +67,17 @@ class Url(str):
             return False
         
         
+    
+    def __eq__(self, __x: object) -> bool:
+        
+        return super().__eq__(__x)
+        
+     
+        
+    def __hash__(self) -> int:
+        return super().__hash__()
+    
+    
         
     def __repr__(self) -> str:
         
