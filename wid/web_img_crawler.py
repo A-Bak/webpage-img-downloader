@@ -31,8 +31,8 @@ def start_crawler(url, target_dir, img_regex):
     
     c = WebCrawler(u1, f)
     
-    if c.img_pattern is None:
-        print(True)
+    c.crawl()    
+
     
     return
 
