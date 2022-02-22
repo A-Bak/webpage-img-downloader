@@ -4,13 +4,15 @@ import re
 from collections import deque
 
 from selenium.common.exceptions import WebDriverException
-from selenium.webdriver.remote.webelement import WebElement
 
 import web.img.save
 import web.img.scrape
 from web.url import Url
 
 
+# TODO: URL normalization / canonicalization
+# E.g. example.com/, example.com, example.com/index.html, example.com/index.php -> one single URL
+# => Use url-normalize library for Python?
 
 
 class WebCrawler():

@@ -1,7 +1,7 @@
 import click
 
 from web.url import Url
-from wid.web.crawler import WebCrawler
+from wid.web.bot.webcrawler import WebCrawler
 
 
 
