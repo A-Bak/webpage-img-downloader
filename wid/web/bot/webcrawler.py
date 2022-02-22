@@ -7,7 +7,9 @@ from selenium.common.exceptions import WebDriverException
 
 import web.img.save
 import web.img.scrape
+
 from web.url import Url
+from web.bot.instructions import Instructions
 
 
 # TODO: URL normalization / canonicalization
@@ -17,15 +19,14 @@ from web.url import Url
 
 class WebCrawler():
     
-    
-    def __init__(self, starting_url: Url, step_function: Callable[[Url], List[Url]], target_dir: str='./', img_regex: str=None) -> None:
+
+    def __init__(self, instructions: Instructions, starting_url: Url, target_dir: str='./', img_regex: str=None) -> None:
 
         self.webdriver = None
+        self.instructions = instructions
         
         self.url_queue = deque([starting_url])
         self.url_visited = set()
-        
-        self.step_function = step_function
 
         self.target_dir = target_dir
         self.img_pattern = re.compile(img_regex) if img_regex is not None else None
@@ -35,6 +36,9 @@ class WebCrawler():
     def crawl(self) -> None:
         
         self.webdriver = web.img.scrape.initialize_webdriver()
+        
+        if self.instructions.validate is not None:
+            self.instructions.validate(self.webdriver, self.url_queue[0])
         
         while len(self.url_queue) > 0:
             target_url = self.url_queue.popleft()
@@ -74,7 +78,11 @@ class WebCrawler():
         
     def _get_next_url_list(self, current_url: Url, step_function: Callable[[Url], List[Url]]=None) -> List[Url]:
         
-        next_url_list = self.step_function(current_url) if step_function is None else step_function(current_url)
+        if step_function is None:
+            next_url_list = self.instructions.next_step(self.webdriver, current_url)
+        else:
+            step_function(self.webdriver, current_url)
+
         valid_url_list = [url for url in next_url_list if url.is_valid()]
         return [url for url in valid_url_list if url not in self.url_visited]
 
