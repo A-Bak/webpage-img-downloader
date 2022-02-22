@@ -2,6 +2,7 @@ from __future__ import annotations
 from typing import List
 
 import re
+import functools
 
 import urllib.parse
 
@@ -72,14 +73,10 @@ class Url(str):
             default_scheme : str
                 default scheme to be used if there is no scheme in the input url
         """
-            
-        if not '//' in url_string:
-            url_string = default_scheme + url_string
         
-        else:
-            url_string = url_string
-        
-        parsed_url = urllib.parse.urlparse(url_string)
+        self.url_string = url_string if '//' in url_string else default_scheme + url_string
+                
+        parsed_url = urllib.parse.urlparse(self.url_string)
         
         self.scheme = parsed_url.scheme
         self.netloc = parsed_url.netloc
@@ -178,23 +175,36 @@ class Url(str):
             
     
     
-    @staticmethod
-    def filter_url_list(url_list: List[Url], regex: str) -> List[Url]:
+    @functools.singledispatch
+    @classmethod
+    def filter_url_list(cls, url_list: List[Url], filter) -> List[Url]:
         """
         Function filters a list of instances of Url class.
         
         Parameters
         -------------------------------------------------------------------------
-            regex : str
-                regex expression used to filter the list of URLs
+            filter : str or re.Pattern
+                filter used on the list of URLs, can be a regex string or a re.Pattern instance
             
         Returns
         -------------------------------------------------------------------------
             list : List[Url]
                 list of Url class instances that match the provided regex expression
-        """           
-        pattern = re.compile(regex)
+        """     
+        raise NotImplementedError('TypeError:Filter argument is not a supported type.')
+              
+    @filter_url_list.register(str)
+    @classmethod
+    def _(cls, url_list: List[Url], filter: str) -> List[Url]:
+        pattern = re.compile(filter)
         filter_func = lambda x: x.match(pattern)
         return list(filter(filter_func, url_list))
- 
+    
+    @filter_url_list.register(re.Pattern)
+    @classmethod
+    def _(cls, url_list: List[Url], filter: re.Pattern) -> List[Url]:
+        filter_func = lambda x: x.match(filter)
+        return list(filter(filter_func, url_list))
+    
+    
 
