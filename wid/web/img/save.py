@@ -1,7 +1,9 @@
+from tkinter.tix import Tree
 from typing import List
 
 import os
 
+import requests
 from urllib.request import urlretrieve
 
 from web.url import Url
@@ -39,7 +41,8 @@ def save_images(url_list: List[Url], path_to_dir: str) -> None:
             print('Downloading image from \'{}\'.'.format(url))
             download_image(url, path_to_dir)
         
-        except:
+        except Exception as e:
+            raise e
             print('Could not retrieve image from \'{}\'.'.format(url))
 
 
@@ -70,7 +73,13 @@ def download_image(url: Url, path_to_dir: str = './') -> None:
         img_basename = os.path.basename(img_path)
         save_file_path = os.path.join(path_to_dir, img_basename) 
         
-        urlretrieve(url, save_file_path)
+        try:
+            urlretrieve(url, save_file_path)
         
+        except:
+            with requests.get(url, stream=Tree) as r:
+                with open(save_file_path, 'wb') as f:
+                    f.write(r.content)
+                
 
             
