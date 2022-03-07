@@ -1,14 +1,12 @@
-from tkinter.tix import Tree
 from typing import List
 
 import os
-
 import requests
 from urllib.request import urlretrieve
 
+import file.utils
 from web.url import Url
 
-import file.utils
 
 
 
@@ -77,7 +75,7 @@ def download_image(url: Url, path_to_dir: str = './') -> None:
             urlretrieve(url, save_file_path)
         
         except:
-            with requests.get(url, stream=Tree) as r:
+            with requests.get(url, stream=True) as r:
                 with open(save_file_path, 'wb') as f:
                     f.write(r.content)
                 
