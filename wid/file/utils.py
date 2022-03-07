@@ -1,17 +1,26 @@
-from typing import List, Type
+from typing import List
 from types import ModuleType
 
 import os
 import sys
 import importlib
 
-from inspect import getmembers, isclass
-
 
 
 
 def create_dir(path_to_dir: str) -> None:
+    """
+    Function creates all nonexistent directories on the path_to_dir file path.
     
+    Parameters
+    -------------------------------------------------------------------------
+        path_to_dir : str
+            save file location for the image
+            
+    Returns
+    -------------------------------------------------------------------------
+        None
+    """  
     if not os.path.isdir(path_to_dir):
         
         try:
@@ -23,7 +32,21 @@ def create_dir(path_to_dir: str) -> None:
             
             
 def import_module(path_to_file: str) -> ModuleType:
+    """
+    Function dynamically imports a Python module from source file located in path_to_file. 
+    The new module is added into sys.modules dictionary. Name of the module is the basename
+    of the path_to_file.
     
+    Parameters
+    -------------------------------------------------------------------------
+        path_to_dir : str
+            location of the module's source file
+            
+    Returns
+    -------------------------------------------------------------------------
+        module: ModuleType
+            instance of a Python module class
+    """      
     if not os.path.exists(path_to_file):
         raise FileNotFoundError('Error: File not found at location {}.'.format(path_to_file))
     
@@ -39,12 +62,3 @@ def import_module(path_to_file: str) -> ModuleType:
     except:
         raise ImportError('Failed to import module {} from {}.'.format(module_name, path_to_file))
     
-    
-
-
-
-
-def get_module_classes(module: ModuleType) -> List[Type]:
-    
-    return [x for x in getmembers(module) if isclass(x[1])]
-    return [x for x in getmembers(module) if isclass(x)]
