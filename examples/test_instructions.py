@@ -44,4 +44,6 @@ class WebCrawlerInstructions(Instructions):
         except NoSuchElementException:
             return []
         
+        
     
+__InstructionClass__ = WebCrawlerInstructions

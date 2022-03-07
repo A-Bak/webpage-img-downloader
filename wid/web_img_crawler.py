@@ -2,41 +2,49 @@ import click
 
 from web.url import Url
 from web.bot.webcrawler import WebCrawler
+from web.bot.instructions import Instructions
+
+from file.utils import import_module
 
 
 
 
 @click.command()
-@click.option('--url', '-u', default=None, help='Url of the website containing desired images.')
+@click.option('--url', '-u', default=None, help='Url of the starting website for the web crawler.')
+@click.option('--instructions', '-i', default=None, help='Implementation of Instructions abstract class used by the WebCrawler.')
 @click.option('--target-dir', '-t', default=None, help='Target directory used to store images.')
-@click.option('--img-regex', '-r', default=None, help='Regex for finding specific subset of images on the website.')
-def start_crawler(url, target_dir, img_regex):
+def execute(url, instructions, target_dir):
     
+    """ Python web crawler for extracting and saving images from websites. """    
 
-    # Target URL
-    # (Authentication)
-    # Instruction - parse URL, retrieve following URLs
-    # (Image filtering - regex)
-    # (Target dir)
-    # Save images
-
-    s = set()
+    target_url = Url(url)
+    target_dir = target_dir if target_dir is not None else './wid-images'
     
-    u1 = Url('https://duckduckgo.com')
-    u2 = Url('https://google.com')
-    u3 = Url('https://duckduckgo.com')
+    try:
+        instructions_module = import_module(instructions)
+        webcrawler_instructions = instructions_module.__InstructionClass__()
+        
+    except:
+        raise ImportError('Failed to import and instantiate user-defined Instructions class from {}.'.format(instructions))
 
-    def f(a):
-        return []
-    
-    c = WebCrawler(u1, f)
-    
-    c.crawl()    
+    start_crawler(webcrawler_instructions, target_url, target_dir)
 
-    
-    return
 
+
+def start_crawler(instructions: Instructions, starting_url: Url, target_dir: str) -> None:
+    
+    if not starting_url.is_valid():
+        raise ValueError('ValueError: Invalid target URL: \'{}\'.'.format(starting_url))
+    
+    click.echo('Starting web crawler on page {}.'.format(starting_url))
+    
+    webcrawler = WebCrawler(instructions, starting_url, target_dir)
+    webcrawler.crawl()
+
+    click.echo('Done.')
+    
+    
 
 if __name__ == "__main__":
     
-    start_crawler()
+    execute()

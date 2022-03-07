@@ -21,6 +21,10 @@ class WebCrawler():
     
     def __init__(self, instructions: Instructions, starting_url: Url, target_dir: str='./wid-images') -> None:
 
+        if not starting_url.is_valid():
+            print('ValueError: Invalid target URL: \'{}\'.'.format(starting_url))
+            raise ValueError
+        
         self.webdriver = None
         self.instructions = instructions
         
@@ -38,7 +42,7 @@ class WebCrawler():
         
         while len(self.url_queue) > 0:
             target_url = self.url_queue.popleft()
-            print('Starting to parse web page \'{}\''.format(target_url))
+            print('Parsing web page \'{}\'.'.format(target_url))
             
             try:
                 self._navigate_url(target_url)
@@ -53,7 +57,6 @@ class WebCrawler():
                 continue
             
         self.webdriver.quit()            
-        print('Done.')
             
             
             
