@@ -44,7 +44,7 @@ def import_module(path_to_file: str) -> ModuleType:
             
     Returns
     -------------------------------------------------------------------------
-        module: ModuleType
+        module : ModuleType
             instance of a Python module class
     """      
     if not os.path.exists(path_to_file):

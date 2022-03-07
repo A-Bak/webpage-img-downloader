@@ -18,7 +18,7 @@ class WebCrawlerInstructions(Instructions):
         
     
         
-    def validate(self, webdriver: WebDriver, starting_url: Url) -> bool:
+    def validate(self, webdriver: WebDriver, url: Url) -> bool:
         pass
     
     
