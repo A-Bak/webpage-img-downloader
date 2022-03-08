@@ -1,10 +1,10 @@
 import click
 
-from web.url import Url
-from web.bot.webcrawler import WebCrawler
-from web.bot.instructions import Instructions
+from wid.web.url import Url
+from wid.web.bot.webcrawler import WebCrawler
+from wid.web.bot.instructions import Instructions
 
-from file.utils import import_module
+from wid.file.utils import import_module
 
 
 
