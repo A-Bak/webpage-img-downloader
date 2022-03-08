@@ -5,7 +5,9 @@
 **/virtualenv
 
 #ignore local deployment of the script - .egg-link
-**/Webpage_Image_Downloader.egg-info
+**/build
+**/dist
+**/wid.egg-info
 
 #ignore Python 3 bytecode compilations
 **/__pycache__
@@ -13,3 +15,5 @@
 #ignore outputs of the script
 wid-images/*
 wid-page-source/*
+
+
