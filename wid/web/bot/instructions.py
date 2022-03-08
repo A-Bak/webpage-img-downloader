@@ -5,7 +5,7 @@ import abc
 from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.remote.webelement import WebElement
 
-from web.url import Url
+from wid.web.url import Url
 
 
 

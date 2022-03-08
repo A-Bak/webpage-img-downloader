@@ -5,11 +5,11 @@ from collections import deque
 
 from selenium.common.exceptions import WebDriverException
 
-import web.img.save
-import web.img.scrape
+import wid.web.img.save
+import wid.web.img.scrape
 
-from web.url import Url
-from web.bot.instructions import Instructions
+from wid.web.url import Url
+from wid.web.bot.instructions import Instructions
 
 
 # TODO: URL normalization / canonicalization
@@ -68,7 +68,7 @@ class WebCrawler():
   
     def crawl(self) -> None:
         
-        self.webdriver = web.img.scrape.initialize_webdriver()
+        self.webdriver = wid.wid.web.img.scrape.initialize_webdriver()
         self.instructions.validate(self.webdriver, self.url_queue[0])
         
         while len(self.url_queue) > 0:
@@ -120,7 +120,7 @@ class WebCrawler():
             raise ValueError('WebDriver is not initialized in WebCrawler.')    
         
         image_elements = self.instructions.find_image_elements(self.webdriver)
-        return [web.img.scrape.get_element_src(e, visited_page_url) for e in image_elements]
+        return [wid.wid.web.img.scrape.get_element_src(e, visited_page_url) for e in image_elements]
     
     
     
@@ -130,7 +130,7 @@ class WebCrawler():
 
         url_dir_name = self.webdriver.current_url.split('/')[-2]
         dir_path = os.path.join(self.target_dir, url_dir_name)
-        web.img.save.save_images(image_urls, dir_path)
+        wid.web.img.save.save_images(image_urls, dir_path)
         
         
 

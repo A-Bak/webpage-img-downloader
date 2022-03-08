@@ -1,8 +1,5 @@
 from typing import List
 
-import re
-import traceback
-
 from selenium import webdriver
 from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.remote.webelement import WebElement
@@ -12,7 +9,7 @@ from selenium.common.exceptions import WebDriverException
 
 from webdriver_manager.chrome import ChromeDriverManager
 
-from web.url import Url
+from wid.web.url import Url
 
 
 

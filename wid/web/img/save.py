@@ -4,8 +4,8 @@ import os
 import requests
 from urllib.request import urlretrieve
 
-import file.utils
-from web.url import Url
+import wid.file.utils
+from wid.web.url import Url
 
 
 
@@ -17,7 +17,7 @@ def save_images(url_list: List[Url], path_to_dir: str) -> None:
     Function saves a set of images from a list of URLs to a location on disk.
     Each image is saved using web.img.save.download_image() function. 
     If there are any missing directories on the path_to_dir, they are created
-    using file.utils.create_dir().
+    using wid.file.utils.create_dir().
     
     
     Parameters
@@ -31,7 +31,7 @@ def save_images(url_list: List[Url], path_to_dir: str) -> None:
     -------------------------------------------------------------------------
         None
     """   
-    file.utils.create_dir(path_to_dir)
+    wid.file.utils.create_dir(path_to_dir)
     
     for url in url_list:
         

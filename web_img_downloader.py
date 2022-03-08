@@ -3,6 +3,8 @@ import os
 import click
 import pyperclip
 
+import wid
+
 from wid.web.url import Url
 
 import wid.web.img.save
