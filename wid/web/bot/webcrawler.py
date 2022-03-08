@@ -18,7 +18,38 @@ from web.bot.instructions import Instructions
 
 
 class WebCrawler():
+    """ 
+    Class WebCrawler is used to parse URLs, find and save desired images and
+    search for next set of URLs to explore. WebCrawler will continue to function
+    while there are URLs in it's url_queue.
     
+    Attributes
+    -------------------------------------------------------------------------
+        webdriver : selenium.webdriver.remote.webdriver.WebDriver
+            instance of Selenium's Chrome webdriver 
+        instructions : web.bot.Instructions
+            instance of user-defined subclass of web crawler Instructions
+        url_queue : deque[Url]
+            FIFO queue of URLs that are explored by the web crawler
+        url_visited : set[Url]
+            set of URLs already visited by the web crawler
+        target_dir : str
+            directory path for saving image files
+        
+    Methods
+    -------------------------------------------------------------------------
+        crawl(self) -> None
+            starts the WebCrawler, navigates and scrapes web pages and downloads image files
+            until there are no URLs left in url_queue.
+        _navigate_url(self, target_url: Url) -> None
+            uses WebDriver to load target_url and adds it to url_visited set
+        _get_next_url_list(self, current_url: Url, step_function: Callable[[Url], List[Url]]=None) -> List[Url]
+            uses Instructions.next_step() or step_function() to get a set of not-visited URLs
+        _find_image_urls(self, visited_page_url: Url) -> List[Url]
+            finds src of desired image elements using Instructions.find_image_elements() on the currently loaded web page
+        _download_images(self, image_urls: List[Url]) -> None
+            downloads a list of images and saves them in location self.target_dir        
+    """    
     def __init__(self, instructions: Instructions, starting_url: Url, target_dir: str='./wid-images') -> None:
 
         if not starting_url.is_valid():
@@ -49,7 +80,7 @@ class WebCrawler():
                 image_urls = self._find_image_urls(target_url)
                 self._download_images(image_urls)
 
-                next_urls = self._get_next_url_list(target_url)
+                next_urls = self._get_next_url_list()
                 self.url_queue.extend(next_urls)
                    
             except WebDriverException:
@@ -72,7 +103,7 @@ class WebCrawler():
         
         
         
-    def _get_next_url_list(self, current_url: Url, step_function: Callable[[Url], List[Url]]=None) -> List[Url]:
+    def _get_next_url_list(self, step_function: Callable[[Url], List[Url]]=None) -> List[Url]:
         
         if step_function is None:
             next_url_list = self.instructions.next_step(self.webdriver)

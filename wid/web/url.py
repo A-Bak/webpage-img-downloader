@@ -37,7 +37,7 @@ class Url(str):
             returns True if the instance is a valid URL, False otherwise
         get_base_url(self) -> str
             returns the base name of the URL - scheme + netlock
-        def match(self, re.Pattern) -> bool:
+        match(self, re.Pattern) -> bool
             returns True if the URL matches the structure of a URL, False otherwise
     
     Static Methods
