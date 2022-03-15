@@ -74,7 +74,7 @@ def download_image(url: Url, path_to_dir: str = './') -> None:
         try:
             urlretrieve(url, save_file_path)
         
-        except:
+        except Exception:
             with requests.get(url, stream=True) as r:
                 with open(save_file_path, 'wb') as f:
                     f.write(r.content)

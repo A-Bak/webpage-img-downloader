@@ -26,7 +26,7 @@ def create_dir(path_to_dir: str) -> None:
         try:
             os.makedirs(path_to_dir)
         
-        except:
+        except Exception:
             print('Error: Failed to create target_dir \'{}\'.'.format(path_to_dir))
             
             
@@ -59,6 +59,6 @@ def import_module(path_to_file: str) -> ModuleType:
         sys.modules[module_name] = module
         return module
     
-    except:
+    except Exception:
         raise ImportError('Failed to import module {} from {}.'.format(module_name, path_to_file))
     

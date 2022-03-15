@@ -24,7 +24,7 @@ def execute(url, instructions, target_dir):
         instructions_module = import_module(instructions)
         webcrawler_instructions = instructions_module.__InstructionClass__()
         
-    except:
+    except Exception:
         raise ImportError('Failed to import and instantiate user-defined Instructions class from {}.'.format(instructions))
 
     start_crawler(webcrawler_instructions, target_url, target_dir)

@@ -86,7 +86,7 @@ def get_page_source(target_url: Url, target_dir: str) -> None:
         with open(save_file_path, 'w', encoding='utf8') as f:
             f.write(page_src)
             
-    except:
+    except Exception:
         click.echo('Failed.')        
         
     else:
@@ -109,7 +109,7 @@ def download_images(target_url: Url, target_dir: str, img_regex: str) -> None:
         # Store images in target location
         wid.web.img.save.save_images(image_urls, target_dir)    
     
-    except:
+    except Exception:
         click.echo('Failed.')        
     
     else:
