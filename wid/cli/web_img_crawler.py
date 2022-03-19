@@ -13,7 +13,7 @@ from wid.file.utils import import_module
 @click.option('--url', '-u', default=None, help='Url of the starting website for the web crawler.')
 @click.option('--instructions', '-i', default=None, help='Implementation of Instructions abstract class used by the WebCrawler.')
 @click.option('--target-dir', '-t', default=None, help='Target directory used to store images.')
-def execute(url, instructions, target_dir):
+def main(url, instructions, target_dir):
     
     """ Python web crawler for extracting and saving images from websites. """    
 
@@ -47,4 +47,4 @@ def start_crawler(instructions: Instructions, starting_url: Url, target_dir: str
 
 if __name__ == "__main__":
     
-    execute()
+    main()

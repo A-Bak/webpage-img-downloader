@@ -22,7 +22,7 @@ import wid.file.utils
 
 @click.option('--img-info', '-i', is_flag=True, help='Option to find and print all image URLs on the website.')
 @click.option('--page-source', '-p', is_flag=True, help='Option to get the source code of target website and print it (save it).')
-def execute(url: str, target_dir: str, img_regex: str, img_info: bool, page_source: bool) -> None:
+def main(url: str, target_dir: str, img_regex: str, img_info: bool, page_source: bool) -> None:
     
     """ Python script for extracting and saving images from websites. """
         
@@ -119,4 +119,4 @@ def download_images(target_url: Url, target_dir: str, img_regex: str) -> None:
 
 if __name__ == "__main__":
     
-    execute()
+    main()

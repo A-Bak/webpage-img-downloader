@@ -9,11 +9,31 @@ with open('requirements.txt', 'r', encoding='UTF-16') as f:
 
 setuptools.setup(
     name="wid",
-    version="1.0.0",
-    description="Tool for extracting and saving specific images from websites.",
-    long_description=long_description,
+    version="0.1.0",
+    
     author="A-Bak",
     author_email="adam.bak753@gmail.com",
-    packages=["wid"],
+    
+    description="Tool for extracting and saving specific images from websites.",
+    long_description=long_description,
+    long_description_content_type='text/markdown',
+    keywords='webscraping webcrawler image img downloader selenium-python',
+    url='https://github.com/A-Bak/webpage-img-downloader',
+    
+    packages=setuptools.find_packages(),
+    python_requires='>=3.6',
     install_requires=required,
+    
+    classifiers=[
+        "Programming Language :: Python :: 3",
+        "License :: OSI Approved :: MIT License",
+        "Operating System :: OS Independent",
+    ],
+    
+    entry_points={
+        'console_scripts': [
+            'wid-downloader=wid.cli.web_img_downloader:main',
+            'wid-crawler=wid.cli.web_img_crawler:main',
+        ],
+    },
 )
