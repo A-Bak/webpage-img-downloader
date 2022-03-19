@@ -16,7 +16,7 @@ import wid.file.utils
 
 
 @click.command()
-@click.option('--url', '-u', default=None, help='Url of the website containing desired images.')
+@click.option('--url', '-u', default=None, help='Url of the website containing desired images. Contents of the clipboard are used if none is provided.')
 @click.option('--target-dir', '-t', default=None, help='Target directory used to store images.')
 @click.option('--img-regex', '-r', default=None, help='Regex for finding specific subset of images on the website.')
 
@@ -27,8 +27,12 @@ def main(url: str, target_dir: str, img_regex: str, img_info: bool, page_source:
     """ Python script for extracting and saving images from websites. """
         
     url_string = pyperclip.paste() if url is None else url
-    
     target_url = Url(url_string)
+    
+    if target_url is None or not target_url.is_valid():
+        click.echo('Error: Target URL is invalid.')    
+        click.echo(main.get_help(click.Context(main)))
+        exit()
     
     if img_info:
         get_img_info(target_url, img_regex)
@@ -114,7 +118,7 @@ def download_images(target_url: Url, target_dir: str, img_regex: str) -> None:
     
     else:
         click.echo('Done.')
-
+        
 
 
 if __name__ == "__main__":
