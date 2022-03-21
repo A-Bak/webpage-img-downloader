@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 from typing import List
 
 import re
@@ -178,15 +179,15 @@ class Url(str):
             
     
     
-    @functools.singledispatch
+    @functools.singledispatchmethod
     @classmethod
-    def filter_url_list(cls, url_list: List[Url], filter) -> List[Url]:
+    def filter_url_list(cls, url_filter, url_list: List[Url]) -> List[Url]:
         """
         Function filters a list of instances of Url class.
         
         Parameters
         -------------------------------------------------------------------------
-            filter : str or re.Pattern
+            url_filter : str or re.Pattern
                 filter used on the list of URLs, can be a regex string or a re.Pattern instance
             
         Returns
@@ -198,15 +199,15 @@ class Url(str):
               
     @filter_url_list.register(str)
     @classmethod
-    def _(cls, url_list: List[Url], filter: str) -> List[Url]:
-        pattern = re.compile(filter)
-        filter_func = lambda x: x.match(pattern)
+    def _(cls, url_filter, url_list: List[Url]) -> List[Url]:
+        pattern = re.compile(url_filter)
+        filter_func = lambda x: re.match(pattern, x)
         return list(filter(filter_func, url_list))
     
     @filter_url_list.register(re.Pattern)
     @classmethod
-    def _(cls, url_list: List[Url], filter: re.Pattern) -> List[Url]:
-        filter_func = lambda x: x.match(filter)
+    def _(cls, url_filter, url_list: List[Url]) -> List[Url]:
+        filter_func = lambda x: re.match(url_filter, x)
         return list(filter(filter_func, url_list))
     
     

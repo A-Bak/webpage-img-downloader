@@ -55,7 +55,7 @@ def get_img_info(target_url: Url, img_regex: str) -> None:
         
         # Filter image links
         if img_regex is not None:
-            image_urls = Url.filter_url_list(image_urls, img_regex)
+            image_urls = Url.filter_url_list(img_regex, image_urls)
 
         # Print the URLs of images 
         print('Images found:')
@@ -106,7 +106,7 @@ def download_images(target_url: Url, target_dir: str, img_regex: str) -> None:
         
         # Filter images
         if img_regex is not None:
-            image_urls = Url.filter_url_list(image_urls, img_regex)
+            image_urls = Url.filter_url_list(img_regex, image_urls)
         
         # Store images in target location
         wid.web.img.save.save_images(image_urls, target_dir)    

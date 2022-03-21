@@ -2,7 +2,7 @@
 **/.vscode
 
 #ignore folder containing python virtual environment
-**/virtualenv
+**/venv
 
 #ignore local deployment of the script - .egg-link
 **/build
