@@ -71,7 +71,7 @@ class WebCrawler():
   
     def crawl(self) -> None:
         
-        self.webdriver = wid.wid.web.img.scrape.initialize_webdriver()
+        self.webdriver = wid.web.img.scrape.initialize_webdriver()
         self.instructions.validate(self.webdriver, self.url_queue[0])
         
         while len(self.url_queue) > 0:
