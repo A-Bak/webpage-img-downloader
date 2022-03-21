@@ -10,6 +10,7 @@ from wid.web.url import Url
 
 
 
+__all__ = ['save_images', 'download_image']
 
              
 def save_images(url_list: List[Url], path_to_dir: str) -> None:

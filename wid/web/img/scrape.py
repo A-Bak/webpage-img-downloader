@@ -14,6 +14,9 @@ from wid.web.url import Url
 
 
 
+__all__ = ['initialize_webdriver', 'find_image_urls', 'get_element_src', 'get_page_source']
+
+
 def initialize_webdriver() -> WebDriver:
     """
     Function initialized a headless Chrome webdriver instance with suppressed

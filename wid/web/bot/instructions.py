@@ -9,6 +9,10 @@ from wid.web.url import Url
 
 
 
+
+__all__ = ['Instructions']
+
+
 class Instructions(abc.ABC):
     
     @abc.abstractmethod

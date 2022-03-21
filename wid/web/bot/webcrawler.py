@@ -17,6 +17,9 @@ from wid.web.bot.instructions import Instructions
 # => Use url-normalize library for Python?
 
 
+__all__  = ['WebCrawler']
+
+
 class WebCrawler():
     """ 
     Class WebCrawler is used to parse URLs, find and save desired images and

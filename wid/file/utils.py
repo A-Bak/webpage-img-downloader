@@ -1,4 +1,3 @@
-from typing import List
 from types import ModuleType
 
 import os
@@ -6,6 +5,9 @@ import sys
 import importlib
 
 
+
+
+__all__ = ['create_dir', 'import_module']
 
 
 def create_dir(path_to_dir: str) -> None:

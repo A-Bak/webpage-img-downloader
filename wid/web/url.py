@@ -9,6 +9,9 @@ import urllib.parse
 
 
 
+__all__ = ['Url']
+
+
 class Url(str):
     """ 
     Class Url represents the individual part of the URL accoring to the
