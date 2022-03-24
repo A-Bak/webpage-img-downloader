@@ -102,11 +102,18 @@ def get_element_src(element: WebElement, url: Url) -> Url:
         url_string = element.get_attribute('src')
         return Url(url_string)
         
-    # Elements relative URLs -> prepend base address
+    # Elements relative URLs -> prepend base address if needed
     elif element.get_attribute('data-src'):
         
-        url_string = url.get_base_url() + element.get_attribute('data-src')
-        return Url(url_string)
+        url_string = element.get_attribute('data-src').strip()
+        src = Url(url_string)
+
+        if src.is_valid(): 
+            return src
+        
+        else:
+            url_string = url.get_base_url().strip() + element.get_attribute('data-src')
+            return Url(url_string)
     
     # Element has neither attribute -> missing a link?
     else:
