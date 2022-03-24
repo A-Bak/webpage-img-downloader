@@ -123,7 +123,7 @@ class WebCrawler():
             raise ValueError('WebDriver is not initialized in WebCrawler.')    
         
         image_elements = self.instructions.find_image_elements(self.webdriver)
-        return [wid.wid.web.img.scrape.get_element_src(e, visited_page_url) for e in image_elements]
+        return [wid.web.img.scrape.get_element_src(e, visited_page_url) for e in image_elements]
     
     
     
