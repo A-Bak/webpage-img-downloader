@@ -8,7 +8,7 @@ with open('requirements.txt', 'r', encoding='UTF-16') as f:
 
 
 setuptools.setup(
-    name="wid",
+    name="webpage-image-downloader",
     version="0.1.1",
     
     author="A-Bak",

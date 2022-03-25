@@ -8,6 +8,7 @@
 **/build
 **/dist
 **/wid.egg-info
+**/webpage_image_downloader.egg-info
 
 #ignore Python 3 bytecode compilations
 **/__pycache__
