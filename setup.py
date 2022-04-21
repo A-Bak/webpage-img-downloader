@@ -9,7 +9,7 @@ with open('requirements.txt', 'r', encoding='UTF-16') as f:
 
 setuptools.setup(
     name="webpage-image-downloader",
-    version="0.1.1",
+    version="0.1.2",
     
     author="A-Bak",
     author_email="adam.bak753@gmail.com",

@@ -8,12 +8,12 @@ Webpage image downloader (wid) is a python package for finding and saving images
 ---
 You can use pip to install the package wid.
 ```
-pip install wid
+pip install webpage-image-downloader
 ```
 
 ## Executables
 ---
-The `wid` package includes two executables `wid-downloader` and `wid-crawler`.
+The `webpage-image-downloader` (`wid`) package includes two executables `wid-downloader` and `wid-crawler`.
 
 ```
 Usage: wid-downloader [OPTIONS]
